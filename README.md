@@ -1,2 +1,2 @@
-# lab1-SSOO2
+# Lab 1 - Sistemas Operativos II
 Repositorio para la práctica 1 de Sistemas Operativos II
