@@ -15,8 +15,8 @@ int main(){
     char *path = "../estudiantes";
     char *new_path;
     ssize_t read;
-    mkdir("../estudiantes", 0700);
-    fd = fopen("../estudiantes_p1.text", "r");
+    mkdir("./estudiantes", 0700);
+    fd = fopen("./estudiantes_p1.text", "r");
     while((read = getline(&line,&len,fd))!= -1){
         dni = strtok(line, " ");
         sprintf(new_path, "%s/%s", path, dni);

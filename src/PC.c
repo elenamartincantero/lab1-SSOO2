@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     size_t len = 0;
     ssize_t read;
 
-    fd = fopen("../estudiantes_p1.text", "r");
+    fd = fopen("./estudiantes_p1.text", "r");
     while((read = getline(&line,&len,fd))!= -1){
         i++;
         dni = strtok(line, " ");
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
         nota = strtol(nota_c, NULL, 10);
         total += nota; 
         nota_necesaria = 10-nota;
-        sprintf(path, "../estudiantes/%s/nota_necesaria.txt", dni);
+        sprintf(path, "./estudiantes/%s/nota_necesaria.txt", dni);
         sprintf(mensaje,"La nota que debes obtener en este nuevo examen para superar la prueba es %d.", nota_necesaria);
         fd_new_file = fopen(path,"w");
         fwrite(mensaje, 1, strlen(mensaje), fd_new_file);

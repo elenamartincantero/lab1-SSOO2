@@ -32,7 +32,7 @@ int main(){
         perror("Error al crear el hijo PA");
         break;
     case 0:
-        execve("./PA", args, env);
+        execve("./exec/PA", args, env);
         break;
     default:
         waitpid(pa_child, &estado, 0);
@@ -46,7 +46,8 @@ int main(){
         perror("Error al crear el hijo PB");
         break;
     case 0:
-        execve("./PB", args, env);
+        execve("./exec/PB", args, env);
+        printf("error con pb");
         break;
     default:
         pc_child = fork();
@@ -59,7 +60,8 @@ int main(){
         break;
     case 0:
         close(tub_media[LECTURA]);
-        execve("./PC", args_pc, env);
+        execve("./exec/PC", args_pc, env);
+        printf("error con pc");
         break;
     default:
         read(tub_media[LECTURA], buffer, sizeof(buffer));
@@ -68,10 +70,11 @@ int main(){
         waitpid(pb_child, &estado, 0);
         printf("Hijo PB terminado\n");
         writeLog(media);
+        printf("FIN DEL PROGRAMA\n");
         break;
     }
 
-    printf("FIN DEL PROGRAMA");
+    exit(EXIT_SUCCESS);
 }
 
 void writeLog(float media){

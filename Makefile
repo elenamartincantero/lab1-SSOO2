@@ -1,34 +1,29 @@
-DIROBJ := obj/
 DIREXE := exec/
-DIRHEA := include/
 DIRSRC := src/
 
-CFLAGS := -I$(DIRHEA) -c -Wall -ansi
-LDLIBS := -lpthread -lrt
+
 CC := gcc
 
-all : dirs manager pa pb
+all : dirs manager PA PB PC PD exe
 
 dirs:
-	mkdir -p $(DIROBJ) $(DIREXE)
+	mkdir -p $(DIREXE)
 
-manager: $(DIROBJ)manager.o 
-	$(CC) -o $(DIREXE)$@ $^ $(LDLIBS)
+manager: 
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
-pa: $(DIROBJ)pa.o 
-	$(CC) -o $(DIREXE)$@ $^ $(LDLIBS)
+PA: 
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
-pb: $(DIROBJ)pb.o 
-	$(CC) -o $(DIREXE)$@ $^ $(LDLIBS)
+PB:
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
-$(DIROBJ)%.o: $(DIRSRC)%.c
-	$(CC) $(CFLAGS) $^ -o $@
+PC: 
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
-test:
-	./$(DIREXE)manager 3 2 5
+PD: 
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
-solution:
-	./$(DIREXE)manager 2 3 4
+exe:
+	./$(DIREXE)manager
 
-clean : 
-	rm -rf *~ core $(DIROBJ) $(DIREXE) $(DIRHEA)*~ $(DIRSRC)*~
