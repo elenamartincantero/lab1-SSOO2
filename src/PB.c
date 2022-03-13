@@ -21,7 +21,7 @@ int main(){
         sprintf(model_path,"./MODELOSEXAMEN/MODELO%s.pdf", modelo);
         sprintf(path, "./estudiantes/%s/MODELO%s.pdf", dni, modelo);
         
-        symlink(model_path, path);
+        link(model_path, path);
         
     }
 }

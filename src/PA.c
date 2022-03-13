@@ -12,16 +12,15 @@ int main(){
     char c;
     char *line;
     size_t len = 0;
-    char *path = "../estudiantes";
+    char *path = "./estudiantes";
     char *new_path;
     ssize_t read;
-    mkdir("./estudiantes", 0700);
+    mkdir(path, 0700);
     fd = fopen("./estudiantes_p1.text", "r");
     while((read = getline(&line,&len,fd))!= -1){
         dni = strtok(line, " ");
         sprintf(new_path, "%s/%s", path, dni);
         mkdir(new_path, 0700);
     }
-
     exit(EXIT_SUCCESS);
 }

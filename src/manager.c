@@ -10,8 +10,12 @@
 #define LECTURA 0
 #define ESCRITURA 1
 
-void writeLog(float);
+pid_t procesos [3];
+
+void write_log(float);
 void handler(int);
+void terminar_procesos(void);
+
 int main(){
     pid_t pa_child, pb_child, pc_child;
     int estado;
@@ -35,9 +39,12 @@ int main(){
         execve("./exec/PA", args, env);
         break;
     default:
+        procesos[0] = pa_child;
         waitpid(pa_child, &estado, 0);
         printf("HIJO PA terminado\n");
+        sleep(5);
         pb_child = fork();
+        
         break;
     }
     switch (pb_child)
@@ -50,6 +57,7 @@ int main(){
         printf("error con pb");
         break;
     default:
+        procesos[1] = pb_child;
         pc_child = fork();
         break;
     }
@@ -64,12 +72,13 @@ int main(){
         printf("error con pc");
         break;
     default:
+        procesos[2] = pc_child;
         read(tub_media[LECTURA], buffer, sizeof(buffer));
         media = strtol(buffer, NULL, 10);
         printf("Hijo PC terminado\n");
         waitpid(pb_child, &estado, 0);
         printf("Hijo PB terminado\n");
-        writeLog(media);
+        write_log(media);
         printf("FIN DEL PROGRAMA\n");
         break;
     }
@@ -77,7 +86,7 @@ int main(){
     exit(EXIT_SUCCESS);
 }
 
-void writeLog(float media){
+void write_log(float media){
     FILE *fd;
     char *p1 = "******** Log del sistema ********\nCopia de modelos de examen, finalizada.\nCreación de archivos con nota necesaria para alcanzar la nota de corte, finalizada.\n";
     char *l4 = malloc(300UL);
@@ -88,6 +97,36 @@ void writeLog(float media){
 
 }
 
+void terminar_procesos(){
+    printf("Terminando procesos...\n");
+    for (int i = 0; i < 3; i++)
+    {
+        kill(procesos[i], SIGINT);
+        
+    }
+    
+}
+
 void handler(int sig){
-    //kill();
+    pid_t pd_child;
+    char *args [] = {NULL};
+    char *env [] = {NULL};
+    int estado;
+    printf("Interrupción capturada - CTRL C\n");
+    terminar_procesos();
+    pd_child = fork();
+    switch (pd_child)
+    {
+    case -1:
+        perror("Error al crear el hijo PD");
+        break;
+    case 0:
+        execve("./exec/PD", args, env);
+        break;
+    default:
+        waitpid(pd_child, &estado, 0);
+        printf("Hijo PD terminado\n");
+        break;
+    }
+    exit(EXIT_SUCCESS);
 }
