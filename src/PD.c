@@ -23,7 +23,6 @@ void eliminar_directorio(char *path){
     DIR *dir;
     struct dirent *file;
     struct stat stat_file;
-    printf("%s\n", path);
     char *new_path;
     new_path = malloc(300UL);
     dir = opendir(path);

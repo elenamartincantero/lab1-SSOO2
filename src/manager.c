@@ -91,7 +91,7 @@ void write_log(float media){
     char *p1 = "******** Log del sistema ********\nCopia de modelos de examen, finalizada.\nCreación de archivos con nota necesaria para alcanzar la nota de corte, finalizada.\n";
     char *l4 = malloc(300UL);
     sprintf(l4, "%sLa nota media de la clase es: %.2f\nFIN DE PROGRAMA", p1, media);
-    fd = fopen("../log.txt", "w");
+    fd = fopen("./log.txt", "w");
     fwrite(l4, 1, strlen(l4), fd);
 
 

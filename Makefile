@@ -24,6 +24,10 @@ PC:
 PD: 
 	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
 
+daemon:
+	$(CC) -o $(DIREXE)$@ $(DIRSRC)$@.c -g
+
 exe:
+	./$(DIREXE)daemon
 	./$(DIREXE)manager
 
