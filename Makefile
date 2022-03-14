@@ -1,10 +1,11 @@
 DIREXE := exec/
 DIRSRC := src/
+DIRSTD := estudiantes/
 
 
 CC := gcc
 
-all : dirs manager PA PB PC PD exe
+all : dirs manager PA PB PC PD daemon exe
 
 dirs:
 	mkdir -p $(DIREXE)
@@ -30,4 +31,7 @@ daemon:
 exe:
 	./$(DIREXE)daemon
 	./$(DIREXE)manager
+
+clean:
+	rm -rf *~ core $(DIREXE) $(DIRSTD)
 

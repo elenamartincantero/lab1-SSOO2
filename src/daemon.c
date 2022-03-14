@@ -11,7 +11,6 @@ void copy_dir(char *, char *);
 void copy_file(char *, char *);
 int main(int argc, char* argv[])
 {
-    FILE *fp= NULL;
     pid_t process_id = 0;
     pid_t sid = 0;
     
@@ -20,19 +19,19 @@ int main(int argc, char* argv[])
     if (process_id < 0)
     {
         printf("Error al crear el proceso hijo\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     // PARENT PROCESS. 
     if (process_id > 0)
     {
         printf("Process_id del proceso demonio %d \n", process_id);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     umask(0);
     sid = setsid();
     if(sid < 0)
     {
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
@@ -52,20 +51,19 @@ int main(int argc, char* argv[])
         copy_dir(".", dir_path);
         sleep(60);
     }
-    fclose(fp);
     return (0);
 }
 
 void copy_dir(char *path, char *path_backup){
-    DIR *dir;
+    DIR *p_dir;
     struct dirent *file;
     struct stat stat_file;
     char *new_path;
     char *backup;
     new_path = malloc(300UL);
     backup = malloc(300UL);
-    dir = opendir(path);
-    while ((file = readdir(dir)) != NULL){
+    p_dir = opendir(path);
+    while ((file = readdir(p_dir)) != NULL){
         sprintf(new_path, "%s/%s", path, file->d_name);
         stat(new_path, &stat_file);
         if(strcmp(".",file->d_name) && strcmp("..", file->d_name)){
@@ -82,23 +80,23 @@ void copy_dir(char *path, char *path_backup){
 }
 
 void copy_file(char *source, char *dest){
-    FILE *origin, *copy;
+    FILE *p_origin, *p_copy;
     struct stat stat_file;
     char buffer [2048];
     size_t size;
     int cantidad = 0;
     int total = 0;
-    copy = fopen(dest, "w");
-    origin = fopen(source, "r");
+    p_copy = fopen(dest, "w");
+    p_origin = fopen(source, "r");
     size = stat_file.st_size;
     while(cantidad < size){
-        cantidad = fread(buffer, 1, sizeof(buffer), origin);
-        fwrite(buffer, 1, cantidad, copy);
+        cantidad = fread(buffer, 1, sizeof(buffer), p_origin);
+        fwrite(buffer, 1, cantidad, p_copy);
         total += cantidad;
         if(cantidad == 0){
             break;
         }
     }
-    fclose(origin);
-    fclose(copy);
+    fclose(p_origin);
+    fclose(p_copy);
 }
