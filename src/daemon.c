@@ -91,7 +91,7 @@ void copy_file(char *source, char *dest){
     copy = fopen(dest, "w");
     origin = fopen(source, "r");
     size = stat_file.st_size;
-    while(cantidad < size || cantidad == 0){
+    while(cantidad < size){
         cantidad = fread(buffer, 1, sizeof(buffer), origin);
         fwrite(buffer, 1, cantidad, copy);
         total += cantidad;

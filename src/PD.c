@@ -9,33 +9,49 @@
 
 void eliminar_directorio(char*);
 int main(){
-    FILE *fd;
+    FILE *p_fd;
     char *mensaje = "Ejecución interrumpida";
 
     eliminar_directorio("./estudiantes");
 
-    fd = fopen("./log.txt", "w");
-    fwrite(mensaje, 1, strlen(mensaje), fd);
+    if((p_fd = fopen("./log.txt", "w")) == NULL){
+        printf("[PD] Error al abrir el archivo log.txt\n");
+        exit(EXIT_FAILURE);
+    }
+    if(fwrite(mensaje, 1, strlen(mensaje), p_fd) == 0){
+        printf("[PD] Error al escribir en el archivo log.txt\n");
+        exit(EXIT_FAILURE);
+    }
     exit(EXIT_SUCCESS);
 }
 
+//Método para eliminar todos los archivos de un directorio recursivamente
 void eliminar_directorio(char *path){
-    DIR *dir;
-    struct dirent *file;
+    DIR *p_dir;
+    struct dirent *p_file;
     struct stat stat_file;
     char *new_path;
     new_path = malloc(300UL);
-    dir = opendir(path);
-    while ((file = readdir(dir)) != NULL){
-        sprintf(new_path, "%s/%s", path, file->d_name);
+    if((p_dir = opendir(path)) == NULL){
+        printf("[PD] Error al abrir el directorio %s\n", path);
+        exit(EXIT_FAILURE);
+    }
+    while ((p_file = readdir(p_dir)) != NULL){
+        sprintf(new_path, "%s/%s", path, p_file->d_name);
         stat(new_path, &stat_file);
-        if(strcmp(".",file->d_name) && strcmp("..", file->d_name)){
+        if(strcmp(".",p_file->d_name) && strcmp("..", p_file->d_name)){
             if(S_ISDIR(stat_file.st_mode)){
                 eliminar_directorio(new_path);
             }else{
-                remove(new_path);
+                if(remove(new_path) == -1){
+                    printf("[PD] Error al eliminar el archivo %s\n", new_path);
+                    exit(EXIT_FAILURE);
+                }
             }
         }
     }
-    rmdir(path);
+    if(rmdir(path) == -1){
+        printf("[PD] Error al eliminar el directorio %s\n", path);
+        exit(EXIT_FAILURE);
+    }
 }
